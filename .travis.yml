@@ -6,6 +6,6 @@ cache:
 install: mvn clean install -Dmaven.test.failure.ignore=true
 branches:
   only:
-  - develop
+  - embedded_indexing
 jdk:
   - oraclejdk8
