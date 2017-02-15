@@ -38,14 +38,13 @@ import java.io.IOException;
  * the lock is freed.
  *
  * @author Luca Garulli (l.garulli--at--orientdb.com)
- *
  */
 public class ODistributedLockTask extends OAbstractReplicatedTask {
   public static final int FACTORYID = 26;
 
-  private String          resource;
-  private long            timeout;
-  private boolean         acquire;
+  private String  resource;
+  private long    timeout;
+  private boolean acquire;
 
   public ODistributedLockTask() {
   }
@@ -116,7 +115,7 @@ public class ODistributedLockTask extends OAbstractReplicatedTask {
 
   @Override
   public boolean isIdempotent() {
-    return true;
+    return false;
   }
 
   @Override

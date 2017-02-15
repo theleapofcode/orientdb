@@ -387,13 +387,14 @@ public class ODistributedWorker extends Thread {
       final ORemoteServerController remoteSenderServer = manager.getRemoteServer(senderNodeName);
 
       ODistributedServerLog
-          .debug(current, localNodeName, senderNodeName, ODistributedServerLog.DIRECTION.OUT, "Sending response %s back", response);
+          .debug(current, localNodeName, senderNodeName, ODistributedServerLog.DIRECTION.OUT, "Sending response %s back (reqId=%s)",
+              response, iRequest);
 
       remoteSenderServer.sendResponse(response);
 
     } catch (Exception e) {
       ODistributedServerLog.debug(current, localNodeName, senderNodeName, ODistributedServerLog.DIRECTION.OUT,
-          "Error on sending response '%s' back: %s", response, e.toString());
+          "Error on sending response '%s' back (reqId=%s err=%s)", response, iRequest.getId(), e.toString());
     }
   }
 
@@ -428,6 +429,15 @@ public class ODistributedWorker extends Thread {
 
   public long getProcessedRequests() {
     return processedRequests.get();
+  }
+
+  public void reset() {
+    localQueue.clear();
+    if (database != null) {
+      database.activateOnCurrentThread();
+      database.close();
+      database = null;
+    }
   }
 
   public void sendShutdown() {

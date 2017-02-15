@@ -700,11 +700,11 @@ public class OClassImpl extends ODocumentWrapperNoClass implements OClass {
       final OStorage storage = database.getStorage();
 
       if (storage instanceof OStorageProxy) {
-        final String cmd = String.format("alter class `%s` description %s", name, shortName);
+        final String cmd = String.format("alter class `%s` description %s", name, iDescription);
         database.command(new OCommandSQL(cmd)).execute();
       } else if (isDistributedCommand()) {
 
-        final String cmd = String.format("alter class `%s` description %s", name, shortName);
+        final String cmd = String.format("alter class `%s` description %s", name, iDescription);
         final OCommandSQL commandSQL = new OCommandSQL(cmd);
         commandSQL.addExcludedNode(((OAutoshardedStorage) storage).getNodeId());
 
@@ -884,7 +884,11 @@ public class OClassImpl extends ODocumentWrapperNoClass implements OClass {
       final ODatabaseDocumentInternal database = getDatabase();
       final OStorage storage = database.getStorage();
       if (storage instanceof OStorageProxy) {
-        database.command(new OCommandSQL("drop property " + name + '.' + propertyName)).execute();
+        if (getDatabase().getStorage().getConfiguration().isStrictSql()) {
+          database.command(new OCommandSQL("drop property " + name + ".`" + propertyName + "`")).execute();
+        }else{
+          database.command(new OCommandSQL("drop property " + name + '.' + propertyName )).execute();
+        }
       } else if (isDistributedCommand()) {
         OScenarioThreadLocal.executeAsDistributed(new Callable<OProperty>() {
           @Override
@@ -894,7 +898,13 @@ public class OClassImpl extends ODocumentWrapperNoClass implements OClass {
           }
         });
 
-        final OCommandSQL commandSQL = new OCommandSQL("drop property " + name + '.' + propertyName);
+        String stm;
+        if (getDatabase().getStorage().getConfiguration().isStrictSql()) {
+          stm = "drop property " + name + ".`" + propertyName + "`";
+        }else{
+          stm = "drop property " + name + "." + propertyName;
+        }
+        final OCommandSQL commandSQL = new OCommandSQL(stm);
         commandSQL.addExcludedNode(((OAutoshardedStorage) storage).getNodeId());
 
         database.command(commandSQL).execute();

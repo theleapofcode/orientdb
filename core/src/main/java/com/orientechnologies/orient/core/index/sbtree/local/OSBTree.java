@@ -862,24 +862,30 @@ public class OSBTree<K, V> extends ODurableComponent {
               getChanges(atomicOperation, keyBucketCacheEntry));
 
           if (validator != null) {
-            final V oldValue = bucketSearchResult.itemIndex > -1 ?
-                readValue(keyBucket.getValue(bucketSearchResult.itemIndex), atomicOperation) :
-                null;
+            boolean failure = true; // assuming validation throws by default
+            boolean ignored = false;
 
-            boolean doReleasePage = true;
             try {
+              final V oldValue = bucketSearchResult.itemIndex > -1 ?
+                  readValue(keyBucket.getValue(bucketSearchResult.itemIndex), atomicOperation) :
+                  null;
+
               final Object result = validator.validate(key, oldValue, value);
-              if (result == OIndexEngine.Validator.IGNORE)
+              if (result == OIndexEngine.Validator.IGNORE) {
+                ignored = true;
+                failure = false;
                 return false;
-              else
-                doReleasePage = false;
+              }
 
               value = (V) result;
+              failure = false;
             } finally {
-              if (doReleasePage) {
+              if (failure || ignored) {
                 keyBucketCacheEntry.releaseExclusiveLock();
                 releasePage(atomicOperation, keyBucketCacheEntry);
               }
+              if (ignored) // in case of a failure atomic operation will be ended in a usual way below
+                endAtomicOperation(false, null);
             }
           }
 
@@ -951,6 +957,7 @@ public class OSBTree<K, V> extends ODurableComponent {
 
           int sizeDiff = 0;
 
+          boolean ignored = false;
           cacheEntry.acquireExclusiveLock();
           try {
             final ONullBucket<V> nullBucket = new ONullBucket<V>(cacheEntry, getChanges(atomicOperation, cacheEntry),
@@ -961,8 +968,10 @@ public class OSBTree<K, V> extends ODurableComponent {
               final V oldValueValue = oldValue == null ? null : readValue(oldValue, atomicOperation);
 
               final Object result = validator.validate(null, oldValueValue, value);
-              if (result == OIndexEngine.Validator.IGNORE)
+              if (result == OIndexEngine.Validator.IGNORE) {
+                ignored = true;
                 return false;
+              }
 
               value = (V) result;
             }
@@ -974,6 +983,8 @@ public class OSBTree<K, V> extends ODurableComponent {
           } finally {
             cacheEntry.releaseExclusiveLock();
             releasePage(atomicOperation, cacheEntry);
+            if (ignored)
+              endAtomicOperation(false, null);
           }
 
           sizeDiff++;
