@@ -213,7 +213,7 @@
                     <version>${surefire.version}</version>
                     <configuration>
                     	<!-- Travis build workaround -->
-                		<argLine>-Xms1024m -Xmx4096m</argLine>
+                		<argLine>-Xms4096m -Xmx4096m</argLine>
                 		
                         <systemPropertyVariables>
                             <security.userPasswordSaltIterations>1</security.userPasswordSaltIterations>
