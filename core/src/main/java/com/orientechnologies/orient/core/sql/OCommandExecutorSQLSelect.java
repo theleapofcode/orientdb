@@ -1980,8 +1980,9 @@ public class OCommandExecutorSQLSelect extends OCommandExecutorSQLResultsetAbstr
           // are equals.
           if (!OIndexSearchResult.isIndexEqualityOperator(operator)) {
             final String lastFiled = searchResult.lastField.getItemName(searchResult.lastField.getItemCount() - 1);
+            final String embeddedField = searchResult.lastField.getEmbeddedItemName();
             final String relatedIndexField = indexDefinition.getFields().get(searchResult.fieldValuePairs.size());
-            if (!lastFiled.equals(relatedIndexField)) {
+            if (!lastFiled.equals(relatedIndexField) && !embeddedField.equals(relatedIndexField)) {
               continue;
             }
           }
@@ -2138,8 +2139,9 @@ public class OCommandExecutorSQLSelect extends OCommandExecutorSQLResultsetAbstr
             // are equals.
             if (!OIndexSearchResult.isIndexEqualityOperator(operator)) {
               final String lastFiled = searchResult.lastField.getItemName(searchResult.lastField.getItemCount() - 1);
+              final String embeddedField = searchResult.lastField.getEmbeddedItemName();
               final String relatedIndexField = indexDefinition.getFields().get(searchResult.fieldValuePairs.size());
-              if (!lastFiled.equals(relatedIndexField)) {
+              if (!lastFiled.equals(relatedIndexField) && !embeddedField.equals(relatedIndexField)) {
                 continue;
               }
             }
