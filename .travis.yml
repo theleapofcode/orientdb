@@ -4,11 +4,9 @@ cache:
   directories:
   - $HOME/.m2
 install:
-script: mvn clean install -DskipTests
+script: mvn clean install -DskipTests -DscmBranch=embedded_indexing
 branches:
   only:
   - embedded_indexing
 jdk:
   - oraclejdk8
-env:
-- scmBranch=embedded_indexing
