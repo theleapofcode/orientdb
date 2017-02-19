@@ -10,3 +10,5 @@ branches:
   - embedded_indexing
 jdk:
   - oraclejdk8
+env:
+- scmBranch=embedded_indexing
