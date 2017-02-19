@@ -3,7 +3,8 @@ language: java
 cache:
   directories:
   - $HOME/.m2
-install: mvn clean install -DskipTests
+install:
+script: mvn clean install -DskipTests
 branches:
   only:
   - embedded_indexing

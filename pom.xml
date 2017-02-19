@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 
-<!-- ~ Copyright 2010-2013 Orient Technologies LTD ~ ~ Licensed under the 
-    Apache License, Version 2.0 (the "License"); ~ you may not use this file 
-    except in compliance with the License. ~ You may obtain a copy of the License 
-    at ~ ~ http://www.apache.org/licenses/LICENSE-2.0 ~ ~ Unless required by 
-    applicable law or agreed to in writing, software ~ distributed under the 
-    License is distributed on an "AS IS" BASIS, ~ WITHOUT WARRANTIES OR CONDITIONS 
-    OF ANY KIND, either express or implied. ~ See the License for the specific 
+<!-- ~ Copyright 2010-2013 Orient Technologies LTD ~ ~ Licensed under the
+    Apache License, Version 2.0 (the "License"); ~ you may not use this file
+    except in compliance with the License. ~ You may obtain a copy of the License
+    at ~ ~ http://www.apache.org/licenses/LICENSE-2.0 ~ ~ Unless required by
+    applicable law or agreed to in writing, software ~ distributed under the
+    License is distributed on an "AS IS" BASIS, ~ WITHOUT WARRANTIES OR CONDITIONS
+    OF ANY KIND, either express or implied. ~ See the License for the specific
     language governing permissions and ~ limitations under the License. -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -212,11 +212,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire.version}</version>
                     <configuration>
-                    	<!-- Travis build workaround -->
-                    	<forkCount>3</forkCount>
-    					<reuseForks>true</reuseForks>
-                		<argLine>-Xms4096m -Xmx4096m</argLine>
-                		
+
                         <systemPropertyVariables>
                             <security.userPasswordSaltIterations>1</security.userPasswordSaltIterations>
                         </systemPropertyVariables>
@@ -411,7 +407,7 @@
                 <configuration>
                     <doCheck>false</doCheck>
                     <doUpdate>false</doUpdate>
-                    <!-- Use committed revision so it does not change every 
+                    <!-- Use committed revision so it does not change every
                         time svn update is run -->
                     <useLastCommittedRevision>true</useLastCommittedRevision>
                     <!-- default revision number if unavailable -->
@@ -425,7 +421,7 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <version>2.3.7</version>
                 <configuration>
-                    <!-- | dummy entry to stop bundle plugin from picking 
+                    <!-- | dummy entry to stop bundle plugin from picking
                         up jar config and reporting | WARNING: Duplicate name in Manifest | See http://markmail.org/message/mpkl24wk3jrjhhjg -->
                     <archive>
                         <forced>true</forced>
@@ -433,10 +429,10 @@
                     <excludeDependencies>true</excludeDependencies>
                     <manifestLocation>${project.build.directory}/osgi</manifestLocation>
                     <instructions>
-                        <!-- | stops the "uses" clauses being added to "Export-Package" 
+                        <!-- | stops the "uses" clauses being added to "Export-Package"
                             manifest entry -->
                         <_nouses>true</_nouses>
-                        <!-- | Stop the JAVA_1_n_HOME variables from being 
+                        <!-- | Stop the JAVA_1_n_HOME variables from being
                             treated as headers by Bnd -->
                         <_removeheaders>JAVA_1_3_HOME,JAVA_1_4_HOME,JAVA_1_5_HOME,JAVA_1_6_HOME,JAVA_1_7_HOME,
                             Bnd-LastModified,Built-By,Private-Package,Tool,Created-By,Build-Jdk,Include-Resource,
